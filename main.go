@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/apache/pulsar-client-go/pulsar"
+	"github.com/goku321/pulsar-proto-x/consumer"
 	"github.com/goku321/pulsar-proto-x/producer"
 )
 
@@ -28,8 +29,7 @@ func main() {
 	}
 
 	if *mode == "consumer" {
-		// consume(client, *topic, *sub, *name, *key)
-		log.Println(sub)
+		consumer.Consume(client, *topic, *sub, *name, *key)
 	} else {
 		producer.Produce(client, *topic, *name, *key, *count)
 	}
