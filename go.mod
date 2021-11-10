@@ -2,7 +2,11 @@ module github.com/goku321/pulsar-proto-x
 
 go 1.17
 
-require github.com/apache/pulsar-client-go v0.6.0
+require (
+	github.com/apache/pulsar-client-go v0.6.0
+	github.com/gogo/protobuf v1.3.2
+	github.com/syucream/avro-protobuf v0.0.1
+)
 
 require (
 	github.com/99designs/keyring v1.1.5 // indirect
@@ -16,7 +20,6 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dvsekhvalnov/jose2go v0.0.0-20180829124132-7f401d37b68a // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
@@ -36,7 +39,6 @@ require (
 	github.com/prometheus/procfs v0.1.3 // indirect
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/syucream/avro-protobuf v0.0.1 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
