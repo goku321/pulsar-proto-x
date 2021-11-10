@@ -12,7 +12,7 @@ import (
 
 func main() {
 	sub := flag.String("sub", "test-sub", "subscription name")
-	topic := flag.String("topic", "my-topic", "topic name")
+	topic := flag.String("topic", "prototest", "topic name")
 	key := flag.String("key", "test-key", "key name")
 	name := flag.String("name", "test-consumer", "consumer/producer name")
 	mode := flag.String("mode", "consumer", "consumer/producer")

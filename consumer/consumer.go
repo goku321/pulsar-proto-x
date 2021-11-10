@@ -2,7 +2,6 @@ package consumer
 
 import (
 	"log"
-	"time"
 
 	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/goku321/pulsar-proto-x/schema/person"
@@ -29,6 +28,7 @@ func Consume(c pulsar.Client, topic, subscription, name, key string) {
 			MaxDeliveries:   1,
 			DeadLetterTopic: "dlq",
 		},
+		SubscriptionInitialPosition: pulsar.SubscriptionPositionEarliest,
 	})
 	if err != nil {
 		log.Fatalf("failed to subscribe to topic stream: %v", err)
@@ -37,13 +37,13 @@ func Consume(c pulsar.Client, topic, subscription, name, key string) {
 	defer cons.Close()
 
 	for msg := range cons.Chan() {
-		time.Sleep(time.Second * 0)
-		log.Printf("message with key: %s", msg.Key())
-		log.Printf("message value: %s", string(msg.Payload()))
-		// if strings.Contains(msg.Key(), name) {
-		msg.Nack(msg)
-		log.Printf("Nacked message with key: %s", msg.Key())
-		// }
-		// time.Sleep(time.Second * 1)
+		p := person.Person{}
+		err = msg.GetSchemaValue(&p)
+		if err != nil {
+			log.Printf("failed to decode message: %s\n", msg)
+			continue
+		}
+		log.Printf("message received: %s %d\n", p.Name, p.Age)
+		msg.Ack(msg)
 	}
 }
