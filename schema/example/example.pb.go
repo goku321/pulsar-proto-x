@@ -4,6 +4,7 @@
 package example
 
 import (
+	encoding_binary "encoding/binary"
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
@@ -22,10 +23,67 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+type Nested struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Age                  uint32   `protobuf:"varint,2,opt,name=age,proto3" json:"age,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Nested) Reset()         { *m = Nested{} }
+func (m *Nested) String() string { return proto.CompactTextString(m) }
+func (*Nested) ProtoMessage()    {}
+func (*Nested) Descriptor() ([]byte, []int) {
+	return fileDescriptor_536aee74800ff307, []int{0}
+}
+func (m *Nested) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Nested) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Nested.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Nested) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Nested.Merge(m, src)
+}
+func (m *Nested) XXX_Size() int {
+	return m.Size()
+}
+func (m *Nested) XXX_DiscardUnknown() {
+	xxx_messageInfo_Nested.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Nested proto.InternalMessageInfo
+
+func (m *Nested) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Nested) GetAge() uint32 {
+	if m != nil {
+		return m.Age
+	}
+	return 0
+}
+
 type Example struct {
-	SingleNested         *Example_Nested   `protobuf:"bytes,25,opt,name=single_nested,json=singleNested,proto3" json:"single_nested,omitempty"`
 	Uuid                 string            `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
-	RepeatedNested       []*Example_Nested `protobuf:"bytes,2,rep,name=repeated_nested,json=repeatedNested,proto3" json:"repeated_nested,omitempty"`
+	FloatValue           float32           `protobuf:"fixed32,2,opt,name=float_value,json=floatValue,proto3" json:"float_value,omitempty"`
+	DoubleValue          float64           `protobuf:"fixed64,3,opt,name=double_value,json=doubleValue,proto3" json:"double_value,omitempty"`
+	RepeatedString       []string          `protobuf:"bytes,4,rep,name=repeated_string,json=repeatedString,proto3" json:"repeated_string,omitempty"`
+	MappedStringValue    map[string]string `protobuf:"bytes,5,rep,name=mapped_string_value,json=mappedStringValue,proto3" json:"mapped_string_value,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -35,7 +93,7 @@ func (m *Example) Reset()         { *m = Example{} }
 func (m *Example) String() string { return proto.CompactTextString(m) }
 func (*Example) ProtoMessage()    {}
 func (*Example) Descriptor() ([]byte, []int) {
-	return fileDescriptor_536aee74800ff307, []int{0}
+	return fileDescriptor_536aee74800ff307, []int{1}
 }
 func (m *Example) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -64,13 +122,6 @@ func (m *Example) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Example proto.InternalMessageInfo
 
-func (m *Example) GetSingleNested() *Example_Nested {
-	if m != nil {
-		return m.SingleNested
-	}
-	return nil
-}
-
 func (m *Example) GetUuid() string {
 	if m != nil {
 		return m.Uuid
@@ -78,93 +129,103 @@ func (m *Example) GetUuid() string {
 	return ""
 }
 
-func (m *Example) GetRepeatedNested() []*Example_Nested {
+func (m *Example) GetFloatValue() float32 {
 	if m != nil {
-		return m.RepeatedNested
-	}
-	return nil
-}
-
-// Nested is nested type.
-type Example_Nested struct {
-	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Age                  uint32   `protobuf:"varint,2,opt,name=age,proto3" json:"age,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Example_Nested) Reset()         { *m = Example_Nested{} }
-func (m *Example_Nested) String() string { return proto.CompactTextString(m) }
-func (*Example_Nested) ProtoMessage()    {}
-func (*Example_Nested) Descriptor() ([]byte, []int) {
-	return fileDescriptor_536aee74800ff307, []int{0, 0}
-}
-func (m *Example_Nested) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Example_Nested) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Example_Nested.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *Example_Nested) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Example_Nested.Merge(m, src)
-}
-func (m *Example_Nested) XXX_Size() int {
-	return m.Size()
-}
-func (m *Example_Nested) XXX_DiscardUnknown() {
-	xxx_messageInfo_Example_Nested.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Example_Nested proto.InternalMessageInfo
-
-func (m *Example_Nested) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *Example_Nested) GetAge() uint32 {
-	if m != nil {
-		return m.Age
+		return m.FloatValue
 	}
 	return 0
 }
 
+func (m *Example) GetDoubleValue() float64 {
+	if m != nil {
+		return m.DoubleValue
+	}
+	return 0
+}
+
+func (m *Example) GetRepeatedString() []string {
+	if m != nil {
+		return m.RepeatedString
+	}
+	return nil
+}
+
+func (m *Example) GetMappedStringValue() map[string]string {
+	if m != nil {
+		return m.MappedStringValue
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterType((*Nested)(nil), "example.Nested")
 	proto.RegisterType((*Example)(nil), "example.Example")
-	proto.RegisterType((*Example_Nested)(nil), "example.Example.Nested")
+	proto.RegisterMapType((map[string]string)(nil), "example.Example.MappedStringValueEntry")
 }
 
 func init() { proto.RegisterFile("schema/example/example.proto", fileDescriptor_536aee74800ff307) }
 
 var fileDescriptor_536aee74800ff307 = []byte{
-	// 228 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x29, 0x4e, 0xce, 0x48,
-	0xcd, 0x4d, 0xd4, 0x4f, 0xad, 0x48, 0xcc, 0x2d, 0xc8, 0x49, 0x85, 0xd1, 0x7a, 0x05, 0x45, 0xf9,
-	0x25, 0xf9, 0x42, 0xec, 0x50, 0xae, 0xd2, 0x59, 0x46, 0x2e, 0x76, 0x57, 0x08, 0x5b, 0xc8, 0x86,
-	0x8b, 0xb7, 0x38, 0x33, 0x2f, 0x3d, 0x27, 0x35, 0x3e, 0x2f, 0xb5, 0xb8, 0x24, 0x35, 0x45, 0x42,
-	0x52, 0x81, 0x51, 0x83, 0xdb, 0x48, 0x5c, 0x0f, 0xa6, 0x17, 0xaa, 0x50, 0xcf, 0x0f, 0x2c, 0x1d,
-	0xc4, 0x03, 0x51, 0x0d, 0xe1, 0x09, 0x09, 0x71, 0xb1, 0x94, 0x96, 0x66, 0xa6, 0x48, 0x30, 0x2a,
-	0x30, 0x6a, 0x70, 0x06, 0x81, 0xd9, 0x42, 0x0e, 0x5c, 0xfc, 0x45, 0xa9, 0x05, 0xa9, 0x89, 0x25,
-	0xa9, 0x29, 0x30, 0x33, 0x99, 0x14, 0x98, 0xf1, 0x99, 0xc9, 0x07, 0x53, 0x0f, 0xe1, 0x4b, 0xe9,
-	0x71, 0xb1, 0x21, 0xcc, 0xcf, 0x4b, 0xcc, 0x4d, 0x85, 0x99, 0x0f, 0x62, 0x0b, 0x09, 0x70, 0x31,
-	0x27, 0xa6, 0xa7, 0x4a, 0x30, 0x29, 0x30, 0x6a, 0xf0, 0x06, 0x81, 0x98, 0x4e, 0x6e, 0x27, 0x1e,
-	0xc9, 0x31, 0x5e, 0x78, 0x24, 0xc7, 0xf8, 0xe0, 0x91, 0x1c, 0x63, 0x94, 0x45, 0x7a, 0x66, 0x49,
-	0x46, 0x69, 0x92, 0x5e, 0x72, 0x7e, 0xae, 0x7e, 0x7a, 0x7e, 0x76, 0xa9, 0xb1, 0x91, 0xa1, 0x7e,
-	0x41, 0x69, 0x4e, 0x71, 0x62, 0x91, 0x2e, 0x38, 0x1c, 0x74, 0x2b, 0xf4, 0x51, 0x83, 0xc9, 0x1a,
-	0x4a, 0x27, 0xb1, 0x81, 0xe5, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x1a, 0x12, 0xb2, 0xc6,
-	0x47, 0x01, 0x00, 0x00,
+	// 319 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x91, 0xcb, 0x4e, 0xf3, 0x30,
+	0x10, 0x85, 0xe5, 0xa4, 0x17, 0x75, 0xfa, 0xff, 0x5c, 0x0c, 0x42, 0x15, 0x42, 0x25, 0x74, 0xd3,
+	0x6c, 0x9a, 0x88, 0x76, 0x53, 0xc1, 0x0e, 0x51, 0x76, 0xb0, 0x30, 0x12, 0x48, 0x6c, 0x2a, 0xb7,
+	0x19, 0xd2, 0xaa, 0x49, 0x13, 0x25, 0x36, 0x6a, 0x1f, 0x89, 0x37, 0x61, 0xc9, 0x23, 0xa0, 0x3c,
+	0x09, 0x8a, 0xed, 0x80, 0x40, 0xac, 0xe6, 0xcc, 0x97, 0x73, 0x62, 0x8f, 0x07, 0x4e, 0xf2, 0xf9,
+	0x02, 0x63, 0xee, 0xe3, 0x86, 0xc7, 0x69, 0x84, 0x55, 0xf5, 0xd2, 0x2c, 0x11, 0x09, 0x6d, 0x9a,
+	0xb6, 0xe7, 0x41, 0xe3, 0x0e, 0x73, 0x81, 0x01, 0xa5, 0x50, 0x5b, 0xf3, 0x18, 0x3b, 0xc4, 0x21,
+	0x6e, 0x8b, 0x29, 0x4d, 0xf7, 0xc0, 0xe6, 0x21, 0x76, 0x2c, 0x87, 0xb8, 0xff, 0x59, 0x29, 0x7b,
+	0xaf, 0x16, 0x34, 0x27, 0x3a, 0x5b, 0x26, 0xa4, 0x5c, 0x06, 0x55, 0xa2, 0xd4, 0xf4, 0x14, 0xda,
+	0xcf, 0x51, 0xc2, 0xc5, 0xf4, 0x85, 0x47, 0x52, 0x27, 0x2d, 0x06, 0x0a, 0x3d, 0x94, 0x84, 0x9e,
+	0xc1, 0xbf, 0x20, 0x91, 0xb3, 0x08, 0x8d, 0xc3, 0x76, 0x88, 0x4b, 0x58, 0x5b, 0x33, 0x6d, 0xe9,
+	0xc3, 0x6e, 0x86, 0x29, 0x72, 0x81, 0xc1, 0x34, 0x17, 0xd9, 0x72, 0x1d, 0x76, 0x6a, 0x8e, 0xed,
+	0xb6, 0xd8, 0x4e, 0x85, 0xef, 0x15, 0xa5, 0x8f, 0x70, 0x10, 0xf3, 0x34, 0xfd, 0xb2, 0x99, 0x5f,
+	0xd6, 0x1d, 0xdb, 0x6d, 0x0f, 0xfb, 0x5e, 0x35, 0xb2, 0xb9, 0xaf, 0x77, 0xab, 0xbc, 0x3a, 0xab,
+	0x4e, 0x9a, 0xac, 0x45, 0xb6, 0x65, 0xfb, 0xf1, 0x6f, 0x7e, 0x7c, 0x0d, 0x47, 0x7f, 0x9b, 0xcb,
+	0x17, 0x59, 0xe1, 0xd6, 0x8c, 0x5c, 0x4a, 0x7a, 0x08, 0xf5, 0xef, 0x59, 0x5b, 0x4c, 0x37, 0x17,
+	0xd6, 0x98, 0x5c, 0xdd, 0xbc, 0x15, 0x5d, 0xf2, 0x5e, 0x74, 0xc9, 0x47, 0xd1, 0x25, 0x4f, 0xe3,
+	0x70, 0x29, 0x16, 0x72, 0xe6, 0xcd, 0x93, 0xd8, 0x0f, 0x93, 0x95, 0x1c, 0x0d, 0xcf, 0xfd, 0x54,
+	0x46, 0x39, 0xcf, 0x06, 0x6a, 0x27, 0x83, 0x8d, 0xff, 0x73, 0x65, 0x97, 0xa6, 0xce, 0x1a, 0xea,
+	0xfb, 0xe8, 0x33, 0x00, 0x00, 0xff, 0xff, 0xa3, 0xb5, 0x31, 0xce, 0xd3, 0x01, 0x00, 0x00,
+}
+
+func (m *Nested) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Nested) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Nested) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Age != 0 {
+		i = encodeVarintExample(dAtA, i, uint64(m.Age))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintExample(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Example) Marshal() (dAtA []byte, err error) {
@@ -191,77 +252,50 @@ func (m *Example) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.SingleNested != nil {
-		{
-			size, err := m.SingleNested.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintExample(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xca
-	}
-	if len(m.RepeatedNested) > 0 {
-		for iNdEx := len(m.RepeatedNested) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.RepeatedNested[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintExample(dAtA, i, uint64(size))
-			}
+	if len(m.MappedStringValue) > 0 {
+		for k := range m.MappedStringValue {
+			v := m.MappedStringValue[k]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintExample(dAtA, i, uint64(len(v)))
 			i--
 			dAtA[i] = 0x12
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintExample(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintExample(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x2a
 		}
+	}
+	if len(m.RepeatedString) > 0 {
+		for iNdEx := len(m.RepeatedString) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RepeatedString[iNdEx])
+			copy(dAtA[i:], m.RepeatedString[iNdEx])
+			i = encodeVarintExample(dAtA, i, uint64(len(m.RepeatedString[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if m.DoubleValue != 0 {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.DoubleValue))))
+		i--
+		dAtA[i] = 0x19
+	}
+	if m.FloatValue != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.FloatValue))))
+		i--
+		dAtA[i] = 0x15
 	}
 	if len(m.Uuid) > 0 {
 		i -= len(m.Uuid)
 		copy(dAtA[i:], m.Uuid)
 		i = encodeVarintExample(dAtA, i, uint64(len(m.Uuid)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Example_Nested) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Example_Nested) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Example_Nested) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Age != 0 {
-		i = encodeVarintExample(dAtA, i, uint64(m.Age))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintExample(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -279,33 +313,7 @@ func encodeVarintExample(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Example) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Uuid)
-	if l > 0 {
-		n += 1 + l + sovExample(uint64(l))
-	}
-	if len(m.RepeatedNested) > 0 {
-		for _, e := range m.RepeatedNested {
-			l = e.Size()
-			n += 1 + l + sovExample(uint64(l))
-		}
-	}
-	if m.SingleNested != nil {
-		l = m.SingleNested.Size()
-		n += 2 + l + sovExample(uint64(l))
-	}
-	if m.XXX_unrecognized != nil {
-		n += len(m.XXX_unrecognized)
-	}
-	return n
-}
-
-func (m *Example_Nested) Size() (n int) {
+func (m *Nested) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -324,166 +332,49 @@ func (m *Example_Nested) Size() (n int) {
 	return n
 }
 
+func (m *Example) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Uuid)
+	if l > 0 {
+		n += 1 + l + sovExample(uint64(l))
+	}
+	if m.FloatValue != 0 {
+		n += 5
+	}
+	if m.DoubleValue != 0 {
+		n += 9
+	}
+	if len(m.RepeatedString) > 0 {
+		for _, s := range m.RepeatedString {
+			l = len(s)
+			n += 1 + l + sovExample(uint64(l))
+		}
+	}
+	if len(m.MappedStringValue) > 0 {
+		for k, v := range m.MappedStringValue {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovExample(uint64(len(k))) + 1 + len(v) + sovExample(uint64(len(v)))
+			n += mapEntrySize + 1 + sovExample(uint64(mapEntrySize))
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func sovExample(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozExample(x uint64) (n int) {
 	return sovExample(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Example) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowExample
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Example: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Example: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Uuid", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowExample
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthExample
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthExample
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Uuid = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RepeatedNested", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowExample
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthExample
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthExample
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RepeatedNested = append(m.RepeatedNested, &Example_Nested{})
-			if err := m.RepeatedNested[len(m.RepeatedNested)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 25:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SingleNested", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowExample
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthExample
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthExample
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.SingleNested == nil {
-				m.SingleNested = &Example_Nested{}
-			}
-			if err := m.SingleNested.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipExample(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthExample
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Example_Nested) Unmarshal(dAtA []byte) error {
+func (m *Nested) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -563,6 +454,270 @@ func (m *Example_Nested) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipExample(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthExample
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Example) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowExample
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Example: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Example: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uuid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExample
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExample
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExample
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uuid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FloatValue", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.FloatValue = float32(math.Float32frombits(v))
+		case 3:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoubleValue", wireType)
+			}
+			var v uint64
+			if (iNdEx + 8) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint64(encoding_binary.LittleEndian.Uint64(dAtA[iNdEx:]))
+			iNdEx += 8
+			m.DoubleValue = float64(math.Float64frombits(v))
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RepeatedString", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExample
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExample
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExample
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RepeatedString = append(m.RepeatedString, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MappedStringValue", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExample
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthExample
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthExample
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MappedStringValue == nil {
+				m.MappedStringValue = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowExample
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowExample
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthExample
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthExample
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowExample
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthExample
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthExample
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipExample(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if (skippy < 0) || (iNdEx+skippy) < 0 {
+						return ErrInvalidLengthExample
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.MappedStringValue[mapkey] = mapvalue
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipExample(dAtA[iNdEx:])

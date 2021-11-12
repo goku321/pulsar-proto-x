@@ -3,19 +3,15 @@ package example;
 
 option go_package = "github.com/goku321/pulsar-proto-x/schema/example;example";
 
+message Nested {
+    string name = 1;
+    uint32 age = 2;
+}
+
 message Example {
-    // Nested is nested type.
-    message Nested {
-        string name = 1;
-        uint32 age = 2;
-        // DeepEnum is one or zero.
-        // enum DeepEnum {
-        //     FALSE = 0;
-        //     TRUE = 1;
-        // }
-        // DeepEnum ok = 3;
-    }
-    Nested single_nested = 25;
     string uuid = 1;
-    repeated Nested repeated_nested = 2;
+    float float_value = 2;
+    double double_value = 3;
+    repeated string repeated_string = 4;
+    map<string, string> mapped_string_value = 5;
 }
