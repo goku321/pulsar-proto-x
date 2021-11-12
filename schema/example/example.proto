@@ -9,13 +9,13 @@ message Example {
         string name = 1;
         uint32 age = 2;
         // DeepEnum is one or zero.
-        enum DeepEnum {
-            FALSE = 0;
-            TRUE = 1;
-        }
-        DeepEnum ok = 3;
+        // enum DeepEnum {
+        //     FALSE = 0;
+        //     TRUE = 1;
+        // }
+        // DeepEnum ok = 3;
     }
     Nested single_nested = 25;
     string uuid = 1;
-    repeated Nested nested = 2;
+    repeated Nested repeated_nested = 2;
 }

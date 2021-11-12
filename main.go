@@ -15,7 +15,7 @@ func main() {
 	topic := flag.String("topic", "prototest", "topic name")
 	key := flag.String("key", "test-key", "key name")
 	name := flag.String("name", "test-consumer", "consumer/producer name")
-	mode := flag.String("mode", "consumer", "consumer/producer")
+	mode := flag.String("mode", "producer", "consumer/producer")
 	count := flag.Int("count", 100, "message count")
 	flag.Parse()
 

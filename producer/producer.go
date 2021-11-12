@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/apache/pulsar-client-go/pulsar"
-	"github.com/goku321/pulsar-proto-x/schema/example"
+	"github.com/goku321/pulsar-proto-x/schema/person"
 	"github.com/syucream/avro-protobuf/pkg/serde"
 )
 
@@ -16,7 +16,7 @@ func noop(id pulsar.MessageID, msg *pulsar.ProducerMessage, err error) {
 }
 
 func Produce(c pulsar.Client, topic, name, key string, count int) {
-	x, err := serde.NewSerDe(&example.Example{})
+	x, err := serde.NewSerDe(&person.Person{})
 	if err != nil {
 		log.Fatalf("failed to ser/deser: %s", err)
 	}
@@ -38,13 +38,9 @@ func Produce(c pulsar.Client, topic, name, key string, count int) {
 		// }, noop)
 
 		if _, err := p.Send(context.Background(), &pulsar.ProducerMessage{
-			Value: &example.Example{
-				Uuid: "1",
-				SingleNested: &example.Example_Nested{
-					Name: "Luke",
-					Age:  34,
-					Ok:   example.Example_Nested_TRUE,
-				},
+			Value: &person.Person{
+				Name: "luke",
+				Age:  34,
 			},
 			Key: key,
 		}); err != nil {
