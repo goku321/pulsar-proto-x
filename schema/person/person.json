@@ -1,0 +1,5 @@
+{
+    "type": "PROTOBUF",
+    "schema": "{\"fields\":[{\"default\":\"\",\"name\":\"name\",\"type\":\"string\"},{\"default\":0,\"name\":\"age\",\"type\":\"int\"}],\"name\":\"Person\",\"namespace\":\"person\",\"type\":\"record\"}",
+    "properties": {}
+}

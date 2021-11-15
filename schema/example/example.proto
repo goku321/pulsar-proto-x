@@ -14,4 +14,6 @@ message Example {
     double double_value = 3;
     repeated string repeated_string = 4;
     map<string, string> mapped_string_value = 5;
+    Nested nested = 6;
+    repeated Nested repeated_nested = 7;
 }

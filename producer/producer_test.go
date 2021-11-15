@@ -89,6 +89,16 @@ func TestProducerWithComplexSchema(t *testing.T) {
 			DoubleValue:       3.476,
 			RepeatedString:    []string{"one", "two", "three"},
 			MappedStringValue: map[string]string{"a": "a"},
+			Nested: &example.Nested{
+				Name: "luke",
+				Age:  34,
+			},
+			RepeatedNested: []*example.Nested{
+				{
+					Name: "leia",
+					Age:  35,
+				},
+			},
 		},
 	}); err != nil {
 		log.Fatal(err)
@@ -117,6 +127,16 @@ func TestProducerWithComplexSchema(t *testing.T) {
 		DoubleValue:       3.476,
 		RepeatedString:    []string{"one", "two", "three"},
 		MappedStringValue: map[string]string{"a": "a"},
+		Nested: &example.Nested{
+			Name: "luke",
+			Age:  34,
+		},
+		RepeatedNested: []*example.Nested{
+			{
+				Name: "leia",
+				Age:  35,
+			},
+		},
 	}
 	assert.Equal(t, want, unobj)
 }
